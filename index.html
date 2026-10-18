@@ -1,5 +1,145 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><title>Fixi</title></head>
-<body><h1>Fixi</h1><p>Coming soon.</p></body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fixi &mdash; Privacy Policy</title>
+<meta name="description" content="Fixi privacy policy: what you type stays on your computer, is never written to disk, and is never sent anywhere.">
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1f2328;
+    --muted: #59636e;
+    --rule: #d1d9e0;
+    --accent: #0969da;
+    --callout: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1117;
+      --fg: #e6edf3;
+      --muted: #9198a1;
+      --rule: #3d444d;
+      --accent: #4493f8;
+      --callout: #151b23;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 16px 64px;
+  }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 {
+    font-size: 1.3rem;
+    margin: 40px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .updated { color: var(--muted); margin: 0 0 32px; }
+  .short {
+    background: var(--callout);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 4px 20px;
+  }
+  .short h2 { border: 0; margin-top: 16px; }
+  ul, ol { padding-left: 1.4em; }
+  li { margin: 6px 0; }
+  li p { margin: 8px 0; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Fixi &mdash; Privacy Policy</h1>
+<p class="updated"><strong>Last updated:</strong> 18 October 2026</p>
+
+<section class="short">
+<h2>The short version</h2>
+<p>Fixi watches what you type, on your computer, so that it can notice when something was
+typed in the wrong keyboard language and fix it. That information never leaves your
+computer, is never written to disk, and is never sent to us or to anyone else.</p>
+<p>Fixi has no internet access of any kind.</p>
+</section>
+
+<h2>What Fixi observes</h2>
+<p>To do its job, Fixi has to see your keystrokes as you type them. It keeps them in a small
+area of memory &mdash; at most the current word or short phrase &mdash; so it can tell whether you
+meant Hebrew or English.</p>
+<p>Fixi also notices when a mouse button is pressed &mdash; only that it was pressed, never where,
+and never how the mouse moves &mdash; because a click can move the cursor, and Fixi must then
+forget what it was tracking.</p>
+<p>That memory is cleared:</p>
+<ul>
+  <li>as soon as a correction is made,</li>
+  <li>whenever you move to a different window or text box,</li>
+  <li>whenever you move the cursor, with the keyboard or by clicking,</li>
+  <li>whenever Fixi is paused,</li>
+  <li>the moment a password field is detected.</li>
+</ul>
+
+<h2>What Fixi never does</h2>
+<ul>
+  <li><strong>It never writes what you type to disk.</strong> No log files, no history, no crash dumps
+    containing your text.</li>
+  <li><strong>It never sends anything anywhere.</strong> The app declares no network permissions and
+    contains no networking code. This is verifiable: the package manifest lists its
+    capabilities, and no internet capability is requested.</li>
+  <li>
+    <p><strong>It stays out of password fields it can recognise.</strong> Fixi asks Windows what kind of
+    control you are typing into. If it is a password field, Fixi stops looking. If Windows
+    cannot answer at all, Fixi assumes the worst and stops looking.</p>
+    <p>Some apps do not tell Windows which kind of control is focused &mdash; notably apps built on
+    Electron, such as Visual Studio Code, Slack, Microsoft Teams and Discord. In those apps
+    Fixi cannot recognise a password field. What you type there is still held only in
+    memory, and is never stored or sent anywhere, but Fixi may try to correct it. If you
+    would rather Fixi stayed out of such an app entirely, add it under <strong>Settings &rarr; What to
+    leave alone</strong>.</p>
+  </li>
+  <li><strong>It collects no analytics, telemetry or usage statistics</strong>, and shows no advertising.</li>
+</ul>
+
+<h2>What Fixi stores on your computer</h2>
+<p>Two things, both local, and both yours to delete at any time:</p>
+<ol>
+  <li><strong>Your settings</strong> &mdash; how eager corrections should be, which applications to leave alone,
+    whether to play a sound.</li>
+  <li><strong>Words you have explicitly corrected</strong> &mdash; and only if you turn this on. When you undo a
+    correction, or flip a word yourself, Fixi can remember that word so it does not make the
+    same mistake again. This is <strong>off until you choose to enable it</strong>, it records only words
+    you acted on deliberately, and never words you merely typed. The settings window lists
+    every remembered word and lets you delete them individually or all at once.</li>
+</ol>
+<p>Both are stored in the app's own folder on your computer. Uninstalling Fixi removes them.</p>
+
+<h2>Purchases</h2>
+<p>Fixi is sold through the Microsoft Store, including its free trial. The Store handles the
+purchase and tells Fixi only whether this copy is licensed and whether a trial is still
+running. We receive no payment details, and Fixi has no account, no sign-in and no user
+profile.</p>
+
+<h2>Children</h2>
+<p>Fixi is a typing utility with no social features, no content and no data collection. It is
+suitable for all ages.</p>
+
+<h2>Changes to this policy</h2>
+<p>If this policy ever changes, the updated version will be published here and the date at the
+top will change. Any change that would affect what Fixi observes or stores will also be
+announced in the app itself.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy can be sent to the support address listed on the Fixi page in
+the Microsoft Store.</p>
+
+</main>
+</body>
 </html>
