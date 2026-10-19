@@ -1,23 +1,30 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fixi &mdash; Privacy Policy</title>
-<meta name="description" content="Fixi privacy policy: what you type stays on your computer, is never written to disk, and is never sent anywhere.">
+<title>Fixi &mdash; סוף לג'יבריש</title>
+<meta name="description" content="Fixi מתקן לבד טקסט שהוקלד בשפת המקלדת הלא נכונה, ומחליף את שפת המקלדת. בלי אינטרנט, בלי מנוי.">
+<meta property="og:title" content="Fixi &mdash; כתבתם ג'יבריש? Fixi כבר תיקן.">
+<meta property="og:description" content="מתקן לבד טקסט שהוקלד בשפת המקלדת הלא נכונה, ומחליף את שפת המקלדת. ל-Windows. בלי אינטרנט, בלי מנוי.">
+<meta property="og:type" content="website">
+<link rel="icon" href="icon.png">
+<!--
+  Deliberately self-contained: no analytics, no pixels, no fonts or scripts from anywhere
+  else. A product whose whole case is "nothing leaves your computer" should not have a
+  website that reports its visitors. Attribution comes from Store campaign IDs instead -
+  see the cid handling at the bottom and docs/MARKETING.md.
+-->
 <script>
-  // Chosen before the page renders, so the wrong language never flashes up.
-  // Order: ?lang=he or #he in the link, then the visitor's last choice, then the browser.
+  // Hebrew unless asked otherwise: ?lang=en or #en in the link, or the visitor's last choice
+  // (shared with the privacy page). The audience types Hebrew, whatever their browser says.
   (function () {
     var lang = null;
     var q = location.search.match(/[?&]lang=(he|en)\b/);
     if (q) lang = q[1];
     else if (location.hash === "#he" || location.hash === "#en") lang = location.hash.slice(1);
     if (!lang) { try { lang = localStorage.getItem("fixi-lang"); } catch (e) {} }
-    if (lang !== "he" && lang !== "en") {
-      var langs = navigator.languages || [navigator.language || ""];
-      lang = langs.some(function (l) { return /^(he|iw)\b/i.test(l); }) ? "he" : "en";
-    }
+    if (lang !== "en") lang = "he";
     var root = document.documentElement;
     root.setAttribute("data-lang", lang);
     root.lang = lang;
@@ -31,7 +38,11 @@
     --muted: #59636e;
     --rule: #d1d9e0;
     --accent: #0969da;
+    --accent-fg: #ffffff;
     --callout: #f6f8fa;
+    --screen: #ffffff;
+    --bad: #cf222e;
+    --good: #1a7f37;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -40,7 +51,11 @@
       --muted: #9198a1;
       --rule: #3d444d;
       --accent: #4493f8;
+      --accent-fg: #0d1117;
       --callout: #151b23;
+      --screen: #010409;
+      --bad: #ff7b72;
+      --good: #3fb950;
     }
   }
   * { box-sizing: border-box; }
@@ -48,312 +63,411 @@
     margin: 0;
     background: var(--bg);
     color: var(--fg);
-    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font: 17px/1.65 "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
   }
-  main {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 24px 16px 64px;
-  }
-  .bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 16px;
-  }
+  main { max-width: 880px; margin: 0 auto; padding: 16px 16px 64px; }
+  .bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; }
+  .brand img { width: 32px; height: 32px; border-radius: 6px; }
   .lang-toggle {
-    font: inherit;
-    font-size: 0.95rem;
-    color: var(--accent);
-    background: transparent;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    padding: 4px 16px;
-    cursor: pointer;
+    font: inherit; font-size: 0.95rem; color: var(--accent); background: transparent;
+    border: 1px solid var(--rule); border-radius: 999px; padding: 4px 16px; cursor: pointer;
   }
   .lang-toggle:hover { border-color: var(--accent); }
-  .lang-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  /* Without script both languages show, one after the other, and there is no button. */
+  .lang-toggle:focus-visible, .cta:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
   html:not([data-lang]) .lang-toggle { display: none; }
-  html[data-lang="en"] #he,
-  html[data-lang="he"] #en { display: none; }
-  html:not([data-lang]) #he { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--rule); }
+  html[data-lang="en"] [lang="he"].page,
+  html[data-lang="he"] [lang="en"].page { display: none; }
 
-  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
-  h2 {
-    font-size: 1.3rem;
-    margin: 40px 0 12px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--rule);
+  h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.2; margin: 0 0 12px; }
+  h2 { font-size: 1.4rem; margin: 56px 0 16px; }
+  .lead { font-size: 1.15rem; color: var(--muted); margin: 0 0 24px; max-width: 40em; }
+
+  .cta {
+    display: inline-block; background: var(--accent); color: var(--accent-fg);
+    text-decoration: none; font-weight: 600; padding: 12px 24px; border-radius: 8px;
   }
-  .updated { color: var(--muted); margin: 0 0 32px; }
-  .short {
-    background: var(--callout);
-    border-inline-start: 4px solid var(--accent);
-    border-radius: 6px;
-    padding: 4px 20px;
+  .cta:hover { filter: brightness(1.08); }
+  .price { margin: 12px 0 0; color: var(--muted); }
+  .price strong { color: var(--fg); }
+
+  /* ---- the demo ---- */
+  .demo {
+    margin: 40px 0 0; border: 1px solid var(--rule); border-radius: 12px;
+    background: var(--callout); padding: 16px;
   }
-  .short h2 { border: 0; margin-top: 16px; }
-  ul, ol { padding-inline-start: 1.4em; }
-  li { margin: 6px 0; }
-  li p { margin: 8px 0; }
+  .window {
+    background: var(--screen); border: 1px solid var(--rule); border-radius: 8px;
+    min-height: 88px; padding: 16px; font-size: 1.3rem; position: relative;
+  }
+  .typed { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .typed.wrong { color: var(--bad); }
+  .typed.fixed { color: var(--good); }
+  .caret {
+    display: inline-block; width: 2px; height: 1.2em; background: var(--fg);
+    vertical-align: text-bottom; animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .status { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; min-height: 48px; }
+  .layout {
+    font: 600 0.85rem/1 "Segoe UI", Arial, sans-serif; letter-spacing: 0.04em;
+    border: 1px solid var(--rule); border-radius: 4px; padding: 6px 8px; background: var(--screen);
+  }
+  .toast {
+    background: var(--screen); border: 1px solid var(--rule); border-radius: 8px;
+    padding: 8px 12px; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s;
+  }
+  .toast.show { opacity: 1; }
+  .toast strong { display: block; }
+  .caption { color: var(--muted); font-size: 0.95rem; margin: 12px 0 0; }
+
+  /* ---- sections ---- */
+  .steps { counter-reset: step; list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .steps li { counter-increment: step; background: var(--callout); border-radius: 8px; padding: 16px; }
+  .steps li::before {
+    content: counter(step); display: grid; place-items: center; width: 28px; height: 28px;
+    border-radius: 50%; background: var(--accent); color: var(--accent-fg); font-weight: 700; margin-bottom: 8px;
+  }
+  .features { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); padding: 0; list-style: none; }
+  .features li { border: 1px solid var(--rule); border-radius: 8px; padding: 16px; }
+  .features strong { display: block; margin-bottom: 4px; }
+  .privacy {
+    background: var(--callout); border-inline-start: 4px solid var(--accent);
+    border-radius: 6px; padding: 8px 20px; margin-top: 56px;
+  }
+  .privacy h2 { margin-top: 16px; }
+  details { border-bottom: 1px solid var(--rule); padding: 12px 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p, details ol { margin: 8px 0 0; }
   a { color: var(--accent); }
+  kbd {
+    font: 0.85em "Segoe UI", Arial, sans-serif; border: 1px solid var(--rule);
+    border-bottom-width: 2px; border-radius: 4px; padding: 1px 6px; background: var(--screen);
+  }
+  footer { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
   /* Latin product names inside Hebrew text keep their own direction. */
   bdi { unicode-bidi: isolate; }
+  .bottom-cta { text-align: center; margin-top: 56px; }
 </style>
 </head>
 <body>
 <main>
 
 <div class="bar">
+  <div class="brand"><img src="icon.png" alt=""><span>Fixi</span></div>
   <button type="button" class="lang-toggle" id="lang-toggle"></button>
 </div>
 
-<article id="en" lang="en" dir="ltr">
+<article class="page" id="he" lang="he" dir="rtl">
 
-<h1>Fixi &mdash; Privacy Policy</h1>
-<p class="updated"><strong>Last updated:</strong> 18 October 2026</p>
+<h1>כתבתם ג'יבריש? <bdi>Fixi</bdi> כבר תיקן.</h1>
+<p class="lead">התחלתם להקליד בעברית והמקלדת עוד הייתה באנגלית? <bdi>Fixi</bdi> מזהה את זה, מתקן את
+כל המשפט ומחליף את שפת המקלדת. לבד, בשנייה, בלי למחוק ולהקליד מחדש.</p>
 
-<section class="short">
-<h2>The short version</h2>
-<p>Fixi watches what you type, on your computer, so that it can notice when something was
-typed in the wrong keyboard language and fix it. What you type is held only in memory. It
-is never written to disk by Fixi, and never sent to us or to anyone else.</p>
-<p>Fixi never connects to the internet.</p>
+<a class="cta store-link" href="https://apps.microsoft.com/detail/9N352F736Z5F?hl=he-IL&amp;gl=IL&amp;cid=site">7 ימי ניסיון חינם ב-<bdi>Microsoft Store</bdi></a>
+<p class="price">אחר כך <strong>15 ש"ח, פעם אחת.</strong> בלי מנוי.</p>
+
+<div class="demo-slot"></div>
+
+<h2>איך זה עובד</h2>
+<ol class="steps">
+  <li>מקלידים כרגיל, בכל תוכנה. שוכחים להחליף שפה, כמו תמיד.</li>
+  <li><bdi>Fixi</bdi> מזהה שזה ג'יבריש, ומחכה למילה שנייה כדי להיות בטוח.</li>
+  <li>המשפט מתוקן, שפת המקלדת מוחלפת, וממשיכים להקליד.</li>
+</ol>
+
+<h2>מה הוא יודע לעשות</h2>
+<ul class="features">
+  <li><strong>בשני הכיוונים</strong>עברית שהוקלדה באנגלית, ואנגלית שהוקלדה בעברית.</li>
+  <li><strong>את כל המשפט</strong>לא רק את המילה האחרונה. כל מה שהוקלד בשפה הלא נכונה.</li>
+  <li><strong>ביטול בשנייה</strong>תיקון שלא רציתם? <kbd>Ctrl</kbd> פעמיים, והכול חוזר כמו שהיה.</li>
+  <li><strong>תיקון לפי בקשה</strong><kbd>Shift</kbd> פעמיים הופך את מה שהקלדתם עכשיו לשפה השנייה.</li>
+  <li><strong>גם עם CapsLock</strong>אם ככה אתם עוברים לאנגלית, <bdi>Fixi</bdi> מבין את זה.</li>
+  <li><strong>בשליטה שלכם</strong>השהיה בלחיצה, ואפשר להחריג כל תוכנה שתרצו.</li>
+</ul>
+
+<section class="privacy">
+<h2>לא מתחבר לאינטרנט. בכלל.</h2>
+<p>כדי לתקן, <bdi>Fixi</bdi> חייב לראות מה אתם מקלידים, אז היינו צריכים לבנות אותו נכון: מה שאתם
+מקלידים נשאר בזיכרון בלבד, לכל היותר 20 המילים האחרונות, ונמחק בכל <kbd>Enter</kbd>, מעבר
+חלון, לחיצת עכבר ואחרי כל תיקון. שום דבר לא נכתב לדיסק, ואין ב-<bdi>Fixi</bdi> שום קוד רשת.
+<a href="privacy/?lang=he">מדיניות הפרטיות המלאה</a></p>
 </section>
 
-<h2>What Fixi observes</h2>
-<p>To do its job, Fixi has to see your keystrokes as you type them. It holds them in memory &mdash;
-at most your last 20 words, and never anything from before your last Enter or Tab, click,
-window switch, cursor movement or keyboard shortcut &mdash; so it can tell whether you meant
-Hebrew or English.</p>
-<p>Before correcting anything, Fixi reads back the text just before the cursor, to check that
-what is on screen is exactly what it tracked. It reads only as far back as the text it is
-about to correct, plus a character or two.</p>
-<p>Fixi also notices when a mouse button is pressed &mdash; only that it was pressed, never where,
-and never how the mouse moves &mdash; because a click can move the cursor, and Fixi must then
-forget what it was tracking.</p>
-<p>That memory is cleared:</p>
-<ul>
-  <li>as soon as a correction is made,</li>
-  <li>whenever you press Enter or Tab,</li>
-  <li>whenever you move to a different window or text box,</li>
-  <li>whenever you move the cursor, with the keyboard or by clicking,</li>
-  <li>whenever you use a keyboard shortcut,</li>
-  <li>whenever Fixi is paused,</li>
-  <li>the moment a password field is detected.</li>
-</ul>
-<p><strong>So that you can undo.</strong> After a correction, Fixi keeps the text it replaced, and what it
-replaced it with, so that tapping Ctrl twice can put it back exactly. It keeps at most the
-last 20 corrections, in memory only, and for no longer than ten minutes. They are also
-forgotten when you pause Fixi, when a password field is detected, and when you quit. When
-you undo a correction, Fixi also remembers those words, in memory only, until you quit, so
-that it does not correct them again.</p>
+<h2>שאלות</h2>
 
-<h2>What Fixi never does</h2>
-<ul>
-  <li><strong>It never writes what you type to disk.</strong> No log files and no typing history.</li>
-  <li><strong>It never sends anything anywhere.</strong> Fixi contains no networking code and never
-    connects to the internet. Checking your licence is done by Windows and the Microsoft
-    Store, not by Fixi &mdash; see <em>Purchases</em> below.</li>
-  <li>
-    <p><strong>It stays out of password fields it can recognise.</strong> Fixi asks Windows what kind of
-    control you are typing into. If it is a password field, Fixi stops looking. Until Windows
-    answers, Fixi changes nothing; if the answer is a password field, whatever it held while
-    waiting is discarded.</p>
-    <p>Some apps do not tell Windows which kind of control is focused &mdash; notably apps built on
-    Electron, such as Visual Studio Code, Slack, Microsoft Teams and Discord. In those apps
-    Fixi cannot recognise a password field. What you type there is still held only in
-    memory, and is never stored or sent anywhere, but Fixi may try to correct it. If you
-    would rather Fixi stayed out of such an app entirely, add it under <strong>Settings &rarr; What to
-    leave alone</strong>. Nothing you type in an app listed there is even held in memory.</p>
-  </li>
-  <li><strong>It collects no analytics, telemetry or usage statistics</strong>, and shows no advertising.
-    Fixi's notifications say how many words were fixed, never which words.</li>
-</ul>
+<details>
+  <summary>רגע, זה לא בעצם תוכנה שמקליטה הקלדות?</summary>
+  <p>כדי לזהות ג'יבריש, <bdi>Fixi</bdi> חייב לראות את ההקלדה. ההבדל הוא מה קורה איתה: היא נשארת
+  בזיכרון בלבד, לכל היותר 20 מילים, ונמחקת כל הזמן. היא אף פעם לא נשמרת בקובץ ואף פעם לא נשלחת,
+  כי אין ב-<bdi>Fixi</bdi> קוד שמתחבר לאינטרנט. בשדות סיסמה ש-<bdi>Windows</bdi> מזהה הוא לא נוגע.
+  יש תוכנות, כמו <bdi>VS Code</bdi>, <bdi>Slack</bdi> ו-<bdi>Teams</bdi>, שלא מדווחות
+  ל-<bdi>Windows</bdi> איזה שדה הוא שדה סיסמה, ולכן שם <bdi>Fixi</bdi> לא יכול לזהות אותו. אפשר
+  להחריג כל תוכנה כזאת בהגדרות, ואז <bdi>Fixi</bdi> לא מחזיק ממנה אפילו אות אחת בזיכרון.</p>
+</details>
 
-<h2>What Windows and the Microsoft Store do</h2>
-<p>If Fixi ever crashes, Windows may create an error report, as it does for any app, depending
-on your settings under <strong>Windows Settings &rarr; Privacy &amp; security &rarr; Diagnostics &amp; feedback</strong>.
-Such a report can include part of Fixi's memory at the moment of the crash, which could
-include what you were typing. Microsoft may make crash information available to us through
-its developer dashboard; we use it only to fix the crash.</p>
-<p>The Microsoft Store also gives us aggregate figures, such as how many people installed or
-bought Fixi. These do not identify you and contain nothing you typed.</p>
+<details>
+  <summary>באילו תוכנות זה עובד?</summary>
+  <p>ברוב התוכנות שבהן מקלידים ב-<bdi>Windows</bdi>, למשל <bdi>Chrome</bdi>, <bdi>Word</bdi>,
+  <bdi>Notepad</bdi>, <bdi>Notepad++</bdi> ו-<bdi>VS Code</bdi>. היוצא מן הכלל: חלונות שרצים
+  כמנהל (<bdi>Administrator</bdi>). <bdi>Windows</bdi> לא מאפשר לאף תוכנה לתקן בהם טקסט.</p>
+</details>
 
-<h2>What Fixi stores on your computer</h2>
-<p>Only these, all local, and all yours to change or remove at any time:</p>
-<ol>
-  <li><strong>Your settings</strong> &mdash; when to correct (how many words to wait for, how short a word to
-    ignore), whether to play a sound or show a notification, the menu language, whether Fixi
-    is paused, and that you have seen the first-run notice.</li>
-  <li><strong>Your &ldquo;leave alone&rdquo; lists</strong> &mdash; the applications and words you have added yourself under
-    <strong>Settings &rarr; What to leave alone</strong>. You can remove any of them there.</li>
-</ol>
-<p>The setting <strong>Remember words I correct</strong> is off unless you turn it on. Fixi will only ever
-save words that you undid or flipped yourself &mdash; never words you merely typed &mdash; and only
-with that setting on. Any such word appears in the list of words, where you can remove it.</p>
-<p>All of this is stored in the app's own folder on your computer. Uninstalling Fixi removes
-it.</p>
+<details>
+  <summary>מה צריך כדי להשתמש בו?</summary>
+  <p><bdi>Windows 10</bdi> (גרסה 1809 ומעלה) או <bdi>Windows 11</bdi>, עם מקלדת עברית ומקלדת
+  אנגלית מותקנות. ככה זה כבר אצל כמעט כל מי שמקליד בעברית.</p>
+</details>
 
-<h2>Purchases</h2>
-<p>Fixi is sold through the Microsoft Store, including its free trial. The Store handles the
-purchase and tells Fixi only whether this copy is licensed and whether a trial is still
-running. We receive no payment details, and Fixi has no account, no sign-in and no user
-profile.</p>
+<details>
+  <summary>איך קונים ב-Microsoft Store?</summary>
+  <ol>
+    <li>לוחצים על הכפתור בעמוד הזה ומגיעים לדף של <bdi>Fixi</bdi> ב-<bdi>Microsoft Store</bdi>.</li>
+    <li>בוחרים <strong>ניסיון חינם</strong>: שבעה ימים, הכול פתוח.</li>
+    <li>כשמחליטים להשאיר אותו: <strong>קנייה</strong> בדף ב-<bdi>Store</bdi>, או <strong>קניית
+    <bdi>Fixi</bdi></strong> בתפריט של <bdi>Fixi</bdi> ליד השעון. התשלום עובר דרך חשבון
+    ה-<bdi>Microsoft</bdi> שלכם.</li>
+  </ol>
+</details>
 
-<h2>Children</h2>
-<p>Fixi is a typing utility with no social features, no content and no data collection. It is
-suitable for all ages.</p>
+<details>
+  <summary>ואם הוא מתקן משהו שלא רציתי?</summary>
+  <p><kbd>Ctrl</kbd> פעמיים מחזיר בדיוק את מה שהקלדתם ואת שפת המקלדת, ו-<bdi>Fixi</bdi> לא יתקן את
+  המילים האלה שוב. הוא בנוי להעדיף לפספס על פני לתקן בטעות: הוא מחכה לשתי מילים לפני שהוא
+  נוגע במשהו.</p>
+</details>
 
-<h2>Changes to this policy</h2>
-<p>If this policy ever changes, the updated version will be published here and the date at the
-top will change. Any change that would affect what Fixi observes or stores will also be
-announced in the app itself.</p>
+<details>
+  <summary>יש מנוי?</summary>
+  <p>לא. 15 ש"ח, פעם אחת, וזה שלכם.</p>
+</details>
 
-<h2>Contact</h2>
-<p>Questions about this policy can be sent to the support address listed on the Fixi page in
-the Microsoft Store.</p>
+<div class="bottom-cta">
+  <a class="cta store-link" href="https://apps.microsoft.com/detail/9N352F736Z5F?hl=he-IL&amp;gl=IL&amp;cid=site">לנסות 7 ימים בחינם</a>
+</div>
+
+<footer>
+  <p><a href="privacy/?lang=he">מדיניות פרטיות</a> &middot; לשאלות: כתובת התמיכה שבדף של
+  <bdi>Fixi</bdi> ב-<bdi>Microsoft Store</bdi> &middot; &copy; 2026 <bdi>MeRomi</bdi></p>
+</footer>
 
 </article>
 
-<article id="he" lang="he" dir="rtl">
+<article class="page" id="en" lang="en" dir="ltr">
 
-<h1><bdi>Fixi</bdi> &mdash; מדיניות פרטיות</h1>
-<p class="updated"><strong>עודכן לאחרונה:</strong> 18 באוקטובר 2026</p>
+<h1>Typed gibberish? Fixi already fixed it.</h1>
+<p class="lead">Started typing Hebrew while the keyboard was still in English? Fixi notices, rewrites
+the whole sentence and switches the keyboard language. By itself, in a second, with no
+deleting and retyping.</p>
 
-<section class="short">
-<h2>בקצרה</h2>
-<p><bdi>Fixi</bdi> עוקב אחר ההקלדה שלכם, במחשב שלכם, כדי לזהות מתי טקסט הוקלד בשפת מקלדת
-שגויה ולתקן אותו. מה שאתם מקלידים נשמר בזיכרון בלבד. <bdi>Fixi</bdi> לעולם לא כותב אותו לדיסק,
-ולעולם לא שולח אותו אלינו או לאף אחד אחר.</p>
-<p><bdi>Fixi</bdi> אף פעם לא מתחבר לאינטרנט.</p>
+<a class="cta store-link" href="https://apps.microsoft.com/detail/9N352F736Z5F?cid=site">Free 7-day trial in the Microsoft Store</a>
+<p class="price">Then <strong>one payment</strong> (ILS 15 in Israel). No subscription.</p>
+
+<div class="demo-slot"></div>
+
+<h2>How it works</h2>
+<ol class="steps">
+  <li>Type as usual, in any app. Forget to switch language, as always.</li>
+  <li>Fixi sees it is gibberish, and waits for a second word to be sure.</li>
+  <li>The sentence is fixed, the keyboard is switched, and you keep typing.</li>
+</ol>
+
+<h2>What it does</h2>
+<ul class="features">
+  <li><strong>Both directions</strong>Hebrew typed as English, and English typed as Hebrew.</li>
+  <li><strong>The whole sentence</strong>Not just the last word: everything typed in the wrong language.</li>
+  <li><strong>Undo in a second</strong>Didn't want that? Tap <kbd>Ctrl</kbd> twice and it is all back.</li>
+  <li><strong>Fix on demand</strong>Tap <kbd>Shift</kbd> twice to flip what you just typed.</li>
+  <li><strong>CapsLock too</strong>If that is how you switch to English, Fixi understands.</li>
+  <li><strong>You are in control</strong>Pause in one click, and exclude any app you like.</li>
+</ul>
+
+<section class="privacy">
+<h2>Never connects to the internet. At all.</h2>
+<p>To fix your typing Fixi has to see it, so it had to be built carefully: what you type stays
+in memory only, at most your last 20 words, cleared on every <kbd>Enter</kbd>, window switch,
+mouse click and correction. Nothing is written to disk, and Fixi contains no networking code.
+<a href="privacy/?lang=en">Read the full privacy policy</a></p>
 </section>
 
-<h2>מה <bdi>Fixi</bdi> רואה</h2>
-<p>כדי לעשות את עבודתו, <bdi>Fixi</bdi> צריך לראות את ההקשות שלכם בזמן שאתם מקלידים. הוא שומר
-אותן בזיכרון &mdash; לכל היותר 20 המילים האחרונות, ואף פעם לא דבר שהוקלד לפני הפעם האחרונה
-שלחצתם <bdi>Enter</bdi> או <bdi>Tab</bdi>, לחצתם בעכבר, עברתם לחלון אחר, הזזתם את הסמן או
-השתמשתם בקיצור מקלדת &mdash; כדי שיוכל לזהות אם התכוונתם לעברית או לאנגלית.</p>
-<p>לפני כל תיקון, <bdi>Fixi</bdi> קורא את הטקסט שנמצא ממש לפני הסמן, כדי לוודא שמה שמוצג על
-המסך הוא בדיוק מה שהוא עקב אחריו. הוא קורא אחורה רק עד תחילת הטקסט שהוא עומד לתקן, ועוד
-תו או שניים.</p>
-<p><bdi>Fixi</bdi> גם מבחין כשנלחץ כפתור בעכבר &mdash; רק בעצם הלחיצה, אף פעם לא במיקום שלה ולא
-בתנועת העכבר &mdash; כי לחיצה יכולה להזיז את הסמן, ואז <bdi>Fixi</bdi> חייב לשכוח את מה שעקב
-אחריו.</p>
-<p>הזיכרון הזה נמחק:</p>
-<ul>
-  <li>מיד לאחר ביצוע תיקון,</li>
-  <li>בכל לחיצה על <bdi>Enter</bdi> או <bdi>Tab</bdi>,</li>
-  <li>בכל מעבר לחלון אחר או לתיבת טקסט אחרת,</li>
-  <li>בכל הזזה של הסמן, במקלדת או בלחיצת עכבר,</li>
-  <li>בכל שימוש בקיצור מקלדת,</li>
-  <li>בכל פעם ש-<bdi>Fixi</bdi> מושהה,</li>
-  <li>ברגע שמזוהה שדה סיסמה.</li>
-</ul>
-<p><strong>כדי שאפשר יהיה לבטל.</strong> אחרי תיקון, <bdi>Fixi</bdi> שומר את הטקסט שהוחלף ואת
-מה שהוחלף בו, כדי שהקשה כפולה על <bdi>Ctrl</bdi> תחזיר אותו בדיוק כפי שהיה. הוא שומר לכל
-היותר את 20 התיקונים האחרונים, בזיכרון בלבד, ולא יותר מעשר דקות. הם נמחקים גם כשמשהים את
-<bdi>Fixi</bdi>, כשמזוהה שדה סיסמה וכשסוגרים את <bdi>Fixi</bdi>. כשמבטלים תיקון,
-<bdi>Fixi</bdi> גם זוכר את המילים האלה, בזיכרון בלבד, עד שסוגרים אותו, כדי שלא יתקן אותן
-שוב.</p>
+<h2>Questions</h2>
 
-<h2>מה <bdi>Fixi</bdi> לעולם לא עושה</h2>
-<ul>
-  <li><strong>הוא לעולם לא כותב לדיסק את מה שאתם מקלידים.</strong> אין קובצי יומן ואין היסטוריית
-    הקלדה.</li>
-  <li><strong>הוא לעולם לא שולח שום דבר לשום מקום.</strong> אין ב-<bdi>Fixi</bdi> קוד רשת, והוא
-    אף פעם לא מתחבר לאינטרנט. את בדיקת הרישיון מבצעים <bdi>Windows</bdi>
-    ו-<bdi>Microsoft Store</bdi>, לא <bdi>Fixi</bdi> &mdash; ראו <em>רכישה</em> בהמשך.</li>
-  <li>
-    <p><strong>הוא מתרחק משדות סיסמה שהוא מסוגל לזהות.</strong> <bdi>Fixi</bdi> שואל את
-    <bdi>Windows</bdi> באיזה סוג של רכיב אתם מקלידים. אם זה שדה סיסמה, <bdi>Fixi</bdi> מפסיק
-    להסתכל. עד ש-<bdi>Windows</bdi> עונה, <bdi>Fixi</bdi> לא משנה דבר; ואם התשובה היא שדה
-    סיסמה, כל מה שנשמר בזמן ההמתנה נמחק.</p>
-    <p>יש אפליקציות שלא מדווחות ל-<bdi>Windows</bdi> איזה סוג רכיב נמצא בפוקוס &mdash; בעיקר
-    אפליקציות שבנויות על <bdi>Electron</bdi>, כמו <bdi>Visual Studio Code</bdi>,
-    <bdi>Slack</bdi>, <bdi>Microsoft Teams</bdi> ו-<bdi>Discord</bdi>. באפליקציות האלה
-    <bdi>Fixi</bdi> לא יכול לזהות שדה סיסמה. מה שמקלידים בהן עדיין מוחזק בזיכרון בלבד, ולעולם
-    לא נשמר או נשלח לשום מקום, אבל <bdi>Fixi</bdi> עשוי לנסות לתקן אותו. אם אתם מעדיפים
-    ש-<bdi>Fixi</bdi> לא יתערב כלל באפליקציה כזאת, הוסיפו אותה תחת <strong>הגדרות &larr; מה לא
-    לגעת בו</strong>. מה שמקלידים באפליקציה שמופיעה שם אפילו לא מוחזק בזיכרון.</p>
-  </li>
-  <li><strong>הוא לא אוסף נתוני ניתוח, טלמטריה או סטטיסטיקות שימוש</strong>, ולא מציג פרסומות.
-    ההתראות של <bdi>Fixi</bdi> מציינות כמה מילים תוקנו, אף פעם לא אילו מילים.</li>
-</ul>
+<details>
+  <summary>Wait, isn't this a keylogger?</summary>
+  <p>To notice gibberish, Fixi has to see your typing. What matters is what happens to it: it
+  stays in memory only, at most 20 words, cleared constantly. It is never saved to a file and
+  never sent anywhere, because Fixi has no code that connects to the internet. It stays out of
+  password fields Windows can identify. Some apps, such as VS Code, Slack and Teams, do not tell
+  Windows which field is a password, so there Fixi cannot recognise one. You can exclude any
+  such app in Settings, and then Fixi does not hold a single letter from it, even in memory.</p>
+</details>
 
-<h2>מה <bdi>Windows</bdi> ו-<bdi>Microsoft Store</bdi> עושים</h2>
-<p>אם <bdi>Fixi</bdi> קורס, <bdi>Windows</bdi> עשוי ליצור דוח שגיאה, כמו בכל אפליקציה, בהתאם
-להגדרות שלכם תחת <strong>הגדרות <bdi>Windows</bdi> &larr; פרטיות ואבטחה &larr; אבחון
-ומשוב</strong>. דוח כזה יכול לכלול חלק מהזיכרון של <bdi>Fixi</bdi> ברגע הקריסה, ובו עשוי להופיע
-מה שהקלדתם. <bdi>Microsoft</bdi> עשויה להעביר אלינו מידע על קריסות דרך לוח הבקרה שלה
-למפתחים; אנחנו משתמשים בו רק כדי לתקן את הקריסה.</p>
-<p><bdi>Microsoft Store</bdi> גם מספקת לנו נתונים מצטברים, כמו כמה אנשים התקינו או רכשו את
-<bdi>Fixi</bdi>. הנתונים האלה לא מזהים אתכם ולא כוללים שום דבר שהקלדתם.</p>
+<details>
+  <summary>Which apps does it work in?</summary>
+  <p>Most apps you type in on Windows, for example Chrome, Word, Notepad, Notepad++ and VS Code.
+  The exception is windows running as administrator: Windows does not let any app correct
+  text there.</p>
+</details>
 
-<h2>מה <bdi>Fixi</bdi> שומר במחשב שלכם</h2>
-<p>רק את אלה, הכול מקומי, והכול בשליטתכם &mdash; אפשר לשנות או למחוק בכל עת:</p>
-<ol>
-  <li><strong>ההגדרות שלכם</strong> &mdash; מתי לתקן (כמה מילים להמתין, מתחת לאיזה אורך להתעלם
-    ממילים), אם להשמיע צליל או להציג התראה, שפת התפריטים, אם <bdi>Fixi</bdi> מושהה, ושכבר
-    ראיתם את הודעת ההפעלה הראשונה.</li>
-  <li><strong>רשימות &ldquo;מה לא לגעת בו&rdquo;</strong> &mdash; האפליקציות והמילים שהוספתם בעצמכם
-    תחת <strong>הגדרות &larr; מה לא לגעת בו</strong>. אפשר להסיר כל אחת מהן שם.</li>
-</ol>
-<p>ההגדרה <strong>לזכור מילים שתיקנתי, גם אחרי הפעלה מחדש</strong> כבויה עד שתפעילו אותה.
-<bdi>Fixi</bdi> ישמור רק מילים שביטלתם או החלפתם בעצמכם &mdash; אף פעם לא מילים שסתם הקלדתם
-&mdash; ורק כשההגדרה הזאת פעילה. כל מילה כזאת מופיעה ברשימת המילים, ואפשר להסיר אותה משם.</p>
-<p>הכול נשמר בתיקייה של האפליקציה במחשב שלכם. הסרת ההתקנה של <bdi>Fixi</bdi> מוחקת את
-הכול.</p>
+<details>
+  <summary>What do I need?</summary>
+  <p>Windows 10 (version 1809 or later) or Windows 11, with Hebrew and English keyboards
+  installed.</p>
+</details>
 
-<h2>רכישה</h2>
-<p><bdi>Fixi</bdi> נמכר דרך <bdi>Microsoft Store</bdi>, כולל תקופת הניסיון החינמית.
-ה-<bdi>Store</bdi> מטפל ברכישה ומדווח ל-<bdi>Fixi</bdi> רק אם העותק הזה ברישיון ואם תקופת
-ניסיון עדיין פעילה. אנחנו לא מקבלים פרטי תשלום, ול-<bdi>Fixi</bdi> אין חשבון, אין התחברות
-ואין פרופיל משתמש.</p>
+<details>
+  <summary>How do I buy from the Microsoft Store?</summary>
+  <ol>
+    <li>Click the button on this page to open Fixi's page in the Microsoft Store.</li>
+    <li>Choose <strong>Free trial</strong>: seven days, everything included.</li>
+    <li>When you decide to keep it: <strong>Buy</strong> on the Store page, or <strong>Buy
+    Fixi</strong> in Fixi's menu by the clock. Payment goes through your Microsoft account.</li>
+  </ol>
+</details>
 
-<h2>ילדים</h2>
-<p><bdi>Fixi</bdi> הוא כלי הקלדה ללא תכונות חברתיות, ללא תוכן וללא איסוף נתונים. הוא מתאים לכל
-הגילים.</p>
+<details>
+  <summary>What if it fixes something I didn't want fixed?</summary>
+  <p>Tap <kbd>Ctrl</kbd> twice to get back exactly what you typed and your keyboard language,
+  and Fixi will not touch those words again. It is built to prefer missing a fix over making a
+  wrong one: it waits for two words before it changes anything.</p>
+</details>
 
-<h2>שינויים במדיניות</h2>
-<p>אם המדיניות הזאת תשתנה, הגרסה המעודכנת תפורסם כאן והתאריך בראש העמוד יתעדכן. כל שינוי
-שישפיע על מה ש-<bdi>Fixi</bdi> רואה או שומר יפורסם גם באפליקציה עצמה.</p>
+<details>
+  <summary>Is there a subscription?</summary>
+  <p>No. One payment, and it is yours.</p>
+</details>
 
-<h2>יצירת קשר</h2>
-<p>שאלות על המדיניות אפשר לשלוח לכתובת התמיכה שמופיעה בדף של <bdi>Fixi</bdi>
-ב-<bdi>Microsoft Store</bdi>.</p>
+<div class="bottom-cta">
+  <a class="cta store-link" href="https://apps.microsoft.com/detail/9N352F736Z5F?cid=site">Try it free for 7 days</a>
+</div>
+
+<footer>
+  <p><a href="privacy/?lang=en">Privacy policy</a> &middot; Questions: the support address on
+  Fixi's Microsoft Store page &middot; &copy; 2026 MeRomi</p>
+</footer>
 
 </article>
 
 </main>
+
+<template id="demo-template">
+  <figure class="demo" aria-hidden="true">
+    <div class="window" dir="ltr"><span class="typed"></span><span class="caret"></span></div>
+    <div class="status">
+      <span class="layout">ENG</span>
+      <div class="toast"><strong></strong><span></span></div>
+    </div>
+  </figure>
+</template>
+
 <script>
+  // ---- language toggle (same behaviour and storage key as the privacy page) ----
   (function () {
     var root = document.documentElement;
     var button = document.getElementById("lang-toggle");
-    var titles = { en: "Fixi — Privacy Policy", he: "Fixi — מדיניות פרטיות" };
+    var titles = { he: "Fixi — סוף לג'יבריש", en: "Fixi — fixes text typed in the wrong keyboard language" };
 
     function apply(lang) {
       root.setAttribute("data-lang", lang);
       root.lang = lang;
       root.dir = lang === "he" ? "rtl" : "ltr";
       document.title = titles[lang];
-
-      // The button names the language it switches TO, written in that language.
       var other = lang === "he" ? "en" : "he";
       button.textContent = other === "he" ? "עברית" : "English";
       button.lang = other;
-      button.setAttribute("aria-label", other === "he" ? "עברית" : "Switch to English");
     }
 
-    apply(root.getAttribute("data-lang") === "he" ? "he" : "en");
+    apply(root.getAttribute("data-lang") === "en" ? "en" : "he");
 
     button.addEventListener("click", function () {
       var next = root.getAttribute("data-lang") === "he" ? "en" : "he";
       apply(next);
       try { localStorage.setItem("fixi-lang", next); } catch (e) {}
-      window.scrollTo(0, 0);
     });
+  })();
+
+  // ---- campaign attribution, without tracking anyone ----
+  // A link to this page can carry ?src=<channel> (e.g. ?src=fb-students). It is copied into
+  // the Store link's cid, so Partner Center reports Store visits and installs per channel.
+  // Nothing is stored, sent or set here; it only rewrites the button's address.
+  (function () {
+    var m = location.search.match(/[?&]src=([a-z0-9-]{1,40})\b/i);
+    if (!m) return;
+    var cid = "site-" + m[1].toLowerCase();
+    document.querySelectorAll(".store-link").forEach(function (a) {
+      a.href = a.href.replace(/cid=site\b/, "cid=" + cid);
+    });
+  })();
+
+  // ---- the demo: the exact sentence from the Store certification notes ----
+  // Typed on the English layout, these keys spell "now I want to check" in Hebrew - and Fixi
+  // rewrites all four words once the second one confirms the mix-up.
+  (function () {
+    var typedText = "gfahu tbh rumv kcsue ";
+    var fixedText = "עכשיו אני רוצה לבדוק ";
+    var toast = {
+      he: ["Fixi תיקן בלבול שפה", "4 מילים תוקנו ושפת המקלדת הוחלפה"],
+      en: ["Fixi fixed a language mix-up", "4 words were corrected and the keyboard language was switched"]
+    };
+    var captions = {
+      he: "מה שהוקלד באנגלית בטעות, ומה ש-Fixi השאיר על המסך.",
+      en: "What was typed on the English keyboard by mistake, and what Fixi left on screen."
+    };
+
+    var template = document.getElementById("demo-template");
+    var demos = [];
+    document.querySelectorAll(".demo-slot").forEach(function (slot) {
+      var lang = slot.closest("[lang]").getAttribute("lang");
+      var node = template.content.cloneNode(true);
+      var fig = node.querySelector(".demo");
+      var cap = document.createElement("figcaption");
+      cap.className = "caption";
+      cap.textContent = captions[lang];
+      fig.appendChild(cap);
+      fig.querySelector(".toast strong").textContent = toast[lang][0];
+      fig.querySelector(".toast span").textContent = toast[lang][1];
+      slot.replaceWith(node);
+      demos.push(fig);
+    });
+
+    function set(state, text) {
+      demos.forEach(function (fig) {
+        var t = fig.querySelector(".typed");
+        t.textContent = text;
+        t.className = "typed" + (state ? " " + state : "");
+        // The whole box changes direction, as a real text box does, so the caret follows.
+        fig.querySelector(".window").dir = state === "fixed" ? "rtl" : "ltr";
+        fig.querySelector(".layout").textContent = state === "fixed" ? "HEB" : "ENG";
+        fig.querySelector(".toast").classList.toggle("show", state === "fixed");
+      });
+    }
+
+    // Without motion: show the outcome, which is the point anyway.
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      set("fixed", fixedText);
+      return;
+    }
+
+    function run() {
+      var i = 0;
+      set("", "");
+      (function step() {
+        if (i <= typedText.length) {
+          set(i > 6 ? "wrong" : "", typedText.slice(0, i));
+          i++;
+          setTimeout(step, 110 + Math.random() * 90);
+        } else {
+          setTimeout(function () {
+            set("fixed", fixedText);
+            setTimeout(run, 4500);
+          }, 450);
+        }
+      })();
+    }
+
+    setTimeout(run, 600);
   })();
 </script>
 </body>

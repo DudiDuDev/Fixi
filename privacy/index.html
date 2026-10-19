@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fixi &mdash; Privacy Policy</title>
+<meta name="description" content="Fixi privacy policy: what you type stays on your computer, is never written to disk, and is never sent anywhere.">
+<script>
+  // Chosen before the page renders, so the wrong language never flashes up.
+  // Order: ?lang=he or #he in the link, then the visitor's last choice, then the browser.
+  (function () {
+    var lang = null;
+    var q = location.search.match(/[?&]lang=(he|en)\b/);
+    if (q) lang = q[1];
+    else if (location.hash === "#he" || location.hash === "#en") lang = location.hash.slice(1);
+    if (!lang) { try { lang = localStorage.getItem("fixi-lang"); } catch (e) {} }
+    if (lang !== "he" && lang !== "en") {
+      var langs = navigator.languages || [navigator.language || ""];
+      lang = langs.some(function (l) { return /^(he|iw)\b/i.test(l); }) ? "he" : "en";
+    }
+    var root = document.documentElement;
+    root.setAttribute("data-lang", lang);
+    root.lang = lang;
+    root.dir = lang === "he" ? "rtl" : "ltr";
+  })();
+</script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1f2328;
+    --muted: #59636e;
+    --rule: #d1d9e0;
+    --accent: #0969da;
+    --callout: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d1117;
+      --fg: #e6edf3;
+      --muted: #9198a1;
+      --rule: #3d444d;
+      --accent: #4493f8;
+      --callout: #151b23;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px 64px;
+  }
+  .bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+  .lang-toggle {
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px 16px;
+    cursor: pointer;
+  }
+  .lang-toggle:hover { border-color: var(--accent); }
+  .lang-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Without script both languages show, one after the other, and there is no button. */
+  html:not([data-lang]) .lang-toggle { display: none; }
+  html[data-lang="en"] #he,
+  html[data-lang="he"] #en { display: none; }
+  html:not([data-lang]) #he { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--rule); }
+
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 {
+    font-size: 1.3rem;
+    margin: 40px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .updated { color: var(--muted); margin: 0 0 32px; }
+  .short {
+    background: var(--callout);
+    border-inline-start: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 4px 20px;
+  }
+  .short h2 { border: 0; margin-top: 16px; }
+  ul, ol { padding-inline-start: 1.4em; }
+  li { margin: 6px 0; }
+  li p { margin: 8px 0; }
+  a { color: var(--accent); }
+  /* Latin product names inside Hebrew text keep their own direction. */
+  bdi { unicode-bidi: isolate; }
+</style>
+</head>
+<body>
+<main>
+
+<div class="bar">
+  <button type="button" class="lang-toggle" id="lang-toggle"></button>
+</div>
+
+<article id="en" lang="en" dir="ltr">
+
+<h1>Fixi &mdash; Privacy Policy</h1>
+<p class="updated"><strong>Last updated:</strong> 19 October 2026</p>
+
+<section class="short">
+<h2>The short version</h2>
+<p>Fixi watches what you type, on your computer, so that it can notice when something was
+typed in the wrong keyboard language and fix it. What you type is held only in memory. It
+is never written to disk by Fixi, and never sent to us or to anyone else.</p>
+<p>Fixi never connects to the internet.</p>
+</section>
+
+<h2>What Fixi observes</h2>
+<p>To do its job, Fixi has to see your keystrokes as you type them. It holds them in memory &mdash;
+at most your last 20 words, and never anything from before your last Enter or Tab, click,
+window switch, cursor movement or keyboard shortcut &mdash; so it can tell whether you meant
+Hebrew or English.</p>
+<p>Before correcting anything, Fixi reads back the text just before the cursor, to check that
+what is on screen is exactly what it tracked. It reads only as far back as the text it is
+about to correct, plus a character or two.</p>
+<p>Fixi also notices when a mouse button is pressed &mdash; only that it was pressed, never where,
+and never how the mouse moves &mdash; because a click can move the cursor, and Fixi must then
+forget what it was tracking.</p>
+<p>That memory is cleared:</p>
+<ul>
+  <li>as soon as a correction is made,</li>
+  <li>whenever you press Enter or Tab,</li>
+  <li>whenever you move to a different window or text box,</li>
+  <li>whenever you move the cursor, with the keyboard or by clicking,</li>
+  <li>whenever you use a keyboard shortcut,</li>
+  <li>whenever Fixi is paused,</li>
+  <li>the moment a password field is detected.</li>
+</ul>
+<p><strong>So that you can undo.</strong> After a correction, Fixi keeps the text it replaced, and what it
+replaced it with, so that tapping Ctrl twice can put it back exactly. It keeps at most the
+last 20 corrections, in memory only, and for no longer than ten minutes. They are also
+forgotten when you pause Fixi, when a password field is detected, and when you quit. When
+you undo a correction, Fixi also remembers those words, in memory only, until you quit, so
+that it does not correct them again.</p>
+
+<h2>What Fixi never does</h2>
+<ul>
+  <li><strong>It never writes what you type to disk.</strong> No log files and no typing history.</li>
+  <li><strong>It never sends anything anywhere.</strong> Fixi contains no networking code and never
+    connects to the internet. Checking your licence is done by Windows and the Microsoft
+    Store, not by Fixi &mdash; see <em>Purchases</em> below.</li>
+  <li>
+    <p><strong>It stays out of password fields it can recognise.</strong> Fixi asks Windows what kind of
+    control you are typing into. If it is a password field, Fixi stops looking. Until Windows
+    answers, Fixi changes nothing; if the answer is a password field, whatever it held while
+    waiting is discarded.</p>
+    <p>Some apps do not tell Windows which kind of control is focused &mdash; notably apps built on
+    Electron, such as Visual Studio Code, Slack, Microsoft Teams and Discord. In those apps
+    Fixi cannot recognise a password field. What you type there is still held only in
+    memory, and is never stored or sent anywhere, but Fixi may try to correct it. If you
+    would rather Fixi stayed out of such an app entirely, add it under <strong>Settings &rarr; What to
+    leave alone</strong>. Nothing you type in an app listed there is even held in memory.</p>
+  </li>
+  <li><strong>It collects no analytics, telemetry or usage statistics</strong>, and shows no advertising.
+    Fixi's notifications say how many words were fixed, never which words.</li>
+</ul>
+
+<h2>What Windows and the Microsoft Store do</h2>
+<p>If Fixi ever crashes, Windows may create an error report, as it does for any app, depending
+on your settings under <strong>Windows Settings &rarr; Privacy &amp; security &rarr; Diagnostics &amp; feedback</strong>.
+Such a report can include part of Fixi's memory at the moment of the crash, which could
+include what you were typing. Microsoft may make crash information available to us through
+its developer dashboard; we use it only to fix the crash.</p>
+<p>The Microsoft Store also gives us aggregate figures, such as how many people installed or
+bought Fixi. These do not identify you and contain nothing you typed.</p>
+
+<h2>What Fixi stores on your computer</h2>
+<p>Only these, all local, and all yours to change or remove at any time:</p>
+<ol>
+  <li><strong>Your settings</strong> &mdash; when to correct (how many words to wait for, how short a word to
+    ignore), whether to play a sound or show a notification, the menu language, whether Fixi
+    is paused, and that you have seen the first-run notice.</li>
+  <li><strong>Your &ldquo;leave alone&rdquo; lists</strong> &mdash; the applications and words you have added yourself under
+    <strong>Settings &rarr; What to leave alone</strong>. You can remove any of them there.</li>
+  <li><strong>A few counts</strong> &mdash; how many corrections Fixi has made (less any you undid), and whether
+    and when it has already reminded you about the trial or asked for a rating, so that it
+    does not repeat itself. Numbers and dates only, never what was corrected. They stay on
+    this computer and are never sent anywhere.</li>
+</ol>
+<p>The setting <strong>Remember words I correct</strong> is off unless you turn it on. Fixi will only ever
+save words that you undid or flipped yourself &mdash; never words you merely typed &mdash; and only
+with that setting on. Any such word appears in the list of words, where you can remove it.</p>
+<p>All of this is stored in the app's own folder on your computer. Uninstalling Fixi removes
+it.</p>
+
+<h2>Purchases</h2>
+<p>Fixi is sold through the Microsoft Store, including its free trial. The Store handles the
+purchase and tells Fixi only whether this copy is licensed and whether a trial is still
+running. We receive no payment details, and Fixi has no account, no sign-in and no user
+profile.</p>
+<p>Near the end of the trial, Fixi reminds you twice that it can be bought. After the trial,
+when it notices a mix-up it is no longer allowed to fix, it says so, with a link to the
+Store. Once, after it has been working well for you, it may ask whether you would like to
+rate it; the rating itself happens in the Store's own window.</p>
+
+<h2>Children</h2>
+<p>Fixi is a typing utility with no social features, no content and no data collection. It is
+suitable for all ages.</p>
+
+<h2>Changes to this policy</h2>
+<p>If this policy ever changes, the updated version will be published here and the date at the
+top will change. Any change that would affect what Fixi observes or stores will also be
+announced in the app itself.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy can be sent to the support address listed on the Fixi page in
+the Microsoft Store.</p>
+
+</article>
+
+<article id="he" lang="he" dir="rtl">
+
+<h1><bdi>Fixi</bdi> &mdash; מדיניות פרטיות</h1>
+<p class="updated"><strong>עודכן לאחרונה:</strong> 19 באוקטובר 2026</p>
+
+<section class="short">
+<h2>בקצרה</h2>
+<p><bdi>Fixi</bdi> עוקב אחר ההקלדה שלכם, במחשב שלכם, כדי לזהות מתי טקסט הוקלד בשפת מקלדת
+שגויה ולתקן אותו. מה שאתם מקלידים נשמר בזיכרון בלבד. <bdi>Fixi</bdi> לעולם לא כותב אותו לדיסק,
+ולעולם לא שולח אותו אלינו או לאף אחד אחר.</p>
+<p><bdi>Fixi</bdi> אף פעם לא מתחבר לאינטרנט.</p>
+</section>
+
+<h2>מה <bdi>Fixi</bdi> רואה</h2>
+<p>כדי לעשות את עבודתו, <bdi>Fixi</bdi> צריך לראות את ההקשות שלכם בזמן שאתם מקלידים. הוא שומר
+אותן בזיכרון &mdash; לכל היותר 20 המילים האחרונות, ואף פעם לא דבר שהוקלד לפני הפעם האחרונה
+שלחצתם <bdi>Enter</bdi> או <bdi>Tab</bdi>, לחצתם בעכבר, עברתם לחלון אחר, הזזתם את הסמן או
+השתמשתם בקיצור מקלדת &mdash; כדי שיוכל לזהות אם התכוונתם לעברית או לאנגלית.</p>
+<p>לפני כל תיקון, <bdi>Fixi</bdi> קורא את הטקסט שנמצא ממש לפני הסמן, כדי לוודא שמה שמוצג על
+המסך הוא בדיוק מה שהוא עקב אחריו. הוא קורא אחורה רק עד תחילת הטקסט שהוא עומד לתקן, ועוד
+תו או שניים.</p>
+<p><bdi>Fixi</bdi> גם מבחין כשנלחץ כפתור בעכבר &mdash; רק בעצם הלחיצה, אף פעם לא במיקום שלה ולא
+בתנועת העכבר &mdash; כי לחיצה יכולה להזיז את הסמן, ואז <bdi>Fixi</bdi> חייב לשכוח את מה שעקב
+אחריו.</p>
+<p>הזיכרון הזה נמחק:</p>
+<ul>
+  <li>מיד לאחר ביצוע תיקון,</li>
+  <li>בכל לחיצה על <bdi>Enter</bdi> או <bdi>Tab</bdi>,</li>
+  <li>בכל מעבר לחלון אחר או לתיבת טקסט אחרת,</li>
+  <li>בכל הזזה של הסמן, במקלדת או בלחיצת עכבר,</li>
+  <li>בכל שימוש בקיצור מקלדת,</li>
+  <li>בכל פעם ש-<bdi>Fixi</bdi> מושהה,</li>
+  <li>ברגע שמזוהה שדה סיסמה.</li>
+</ul>
+<p><strong>כדי שאפשר יהיה לבטל.</strong> אחרי תיקון, <bdi>Fixi</bdi> שומר את הטקסט שהוחלף ואת
+מה שהוחלף בו, כדי שהקשה כפולה על <bdi>Ctrl</bdi> תחזיר אותו בדיוק כפי שהיה. הוא שומר לכל
+היותר את 20 התיקונים האחרונים, בזיכרון בלבד, ולא יותר מעשר דקות. הם נמחקים גם כשמשהים את
+<bdi>Fixi</bdi>, כשמזוהה שדה סיסמה וכשסוגרים את <bdi>Fixi</bdi>. כשמבטלים תיקון,
+<bdi>Fixi</bdi> גם זוכר את המילים האלה, בזיכרון בלבד, עד שסוגרים אותו, כדי שלא יתקן אותן
+שוב.</p>
+
+<h2>מה <bdi>Fixi</bdi> לעולם לא עושה</h2>
+<ul>
+  <li><strong>הוא לעולם לא כותב לדיסק את מה שאתם מקלידים.</strong> אין קובצי יומן ואין היסטוריית
+    הקלדה.</li>
+  <li><strong>הוא לעולם לא שולח שום דבר לשום מקום.</strong> אין ב-<bdi>Fixi</bdi> קוד רשת, והוא
+    אף פעם לא מתחבר לאינטרנט. את בדיקת הרישיון מבצעים <bdi>Windows</bdi>
+    ו-<bdi>Microsoft Store</bdi>, לא <bdi>Fixi</bdi> &mdash; ראו <em>רכישה</em> בהמשך.</li>
+  <li>
+    <p><strong>הוא מתרחק משדות סיסמה שהוא מסוגל לזהות.</strong> <bdi>Fixi</bdi> שואל את
+    <bdi>Windows</bdi> באיזה סוג של רכיב אתם מקלידים. אם זה שדה סיסמה, <bdi>Fixi</bdi> מפסיק
+    להסתכל. עד ש-<bdi>Windows</bdi> עונה, <bdi>Fixi</bdi> לא משנה דבר; ואם התשובה היא שדה
+    סיסמה, כל מה שנשמר בזמן ההמתנה נמחק.</p>
+    <p>יש אפליקציות שלא מדווחות ל-<bdi>Windows</bdi> איזה סוג רכיב נמצא בפוקוס &mdash; בעיקר
+    אפליקציות שבנויות על <bdi>Electron</bdi>, כמו <bdi>Visual Studio Code</bdi>,
+    <bdi>Slack</bdi>, <bdi>Microsoft Teams</bdi> ו-<bdi>Discord</bdi>. באפליקציות האלה
+    <bdi>Fixi</bdi> לא יכול לזהות שדה סיסמה. מה שמקלידים בהן עדיין מוחזק בזיכרון בלבד, ולעולם
+    לא נשמר או נשלח לשום מקום, אבל <bdi>Fixi</bdi> עשוי לנסות לתקן אותו. אם אתם מעדיפים
+    ש-<bdi>Fixi</bdi> לא יתערב כלל באפליקציה כזאת, הוסיפו אותה תחת <strong>הגדרות &larr; מה לא
+    לגעת בו</strong>. מה שמקלידים באפליקציה שמופיעה שם אפילו לא מוחזק בזיכרון.</p>
+  </li>
+  <li><strong>הוא לא אוסף נתוני ניתוח, טלמטריה או סטטיסטיקות שימוש</strong>, ולא מציג פרסומות.
+    ההתראות של <bdi>Fixi</bdi> מציינות כמה מילים תוקנו, אף פעם לא אילו מילים.</li>
+</ul>
+
+<h2>מה <bdi>Windows</bdi> ו-<bdi>Microsoft Store</bdi> עושים</h2>
+<p>אם <bdi>Fixi</bdi> קורס, <bdi>Windows</bdi> עשוי ליצור דוח שגיאה, כמו בכל אפליקציה, בהתאם
+להגדרות שלכם תחת <strong>הגדרות <bdi>Windows</bdi> &larr; פרטיות ואבטחה &larr; אבחון
+ומשוב</strong>. דוח כזה יכול לכלול חלק מהזיכרון של <bdi>Fixi</bdi> ברגע הקריסה, ובו עשוי להופיע
+מה שהקלדתם. <bdi>Microsoft</bdi> עשויה להעביר אלינו מידע על קריסות דרך לוח הבקרה שלה
+למפתחים; אנחנו משתמשים בו רק כדי לתקן את הקריסה.</p>
+<p><bdi>Microsoft Store</bdi> גם מספקת לנו נתונים מצטברים, כמו כמה אנשים התקינו או רכשו את
+<bdi>Fixi</bdi>. הנתונים האלה לא מזהים אתכם ולא כוללים שום דבר שהקלדתם.</p>
+
+<h2>מה <bdi>Fixi</bdi> שומר במחשב שלכם</h2>
+<p>רק את אלה, הכול מקומי, והכול בשליטתכם &mdash; אפשר לשנות או למחוק בכל עת:</p>
+<ol>
+  <li><strong>ההגדרות שלכם</strong> &mdash; מתי לתקן (כמה מילים להמתין, מתחת לאיזה אורך להתעלם
+    ממילים), אם להשמיע צליל או להציג התראה, שפת התפריטים, אם <bdi>Fixi</bdi> מושהה, ושכבר
+    ראיתם את הודעת ההפעלה הראשונה.</li>
+  <li><strong>רשימות &ldquo;מה לא לגעת בו&rdquo;</strong> &mdash; האפליקציות והמילים שהוספתם בעצמכם
+    תחת <strong>הגדרות &larr; מה לא לגעת בו</strong>. אפשר להסיר כל אחת מהן שם.</li>
+  <li><strong>כמה מספרים</strong> &mdash; כמה תיקונים <bdi>Fixi</bdi> ביצע (בלי אלה שביטלתם), והאם
+    ומתי הוא כבר הזכיר לכם את סוף תקופת הניסיון או ביקש דירוג, כדי שלא יחזור על עצמו. מספרים
+    ותאריכים בלבד, אף פעם לא מה שתוקן. הם נשארים במחשב ולעולם לא נשלחים לשום מקום.</li>
+</ol>
+<p>ההגדרה <strong>לזכור מילים שתיקנתי, גם אחרי הפעלה מחדש</strong> כבויה עד שתפעילו אותה.
+<bdi>Fixi</bdi> ישמור רק מילים שביטלתם או החלפתם בעצמכם &mdash; אף פעם לא מילים שסתם הקלדתם
+&mdash; ורק כשההגדרה הזאת פעילה. כל מילה כזאת מופיעה ברשימת המילים, ואפשר להסיר אותה משם.</p>
+<p>הכול נשמר בתיקייה של האפליקציה במחשב שלכם. הסרת ההתקנה של <bdi>Fixi</bdi> מוחקת את
+הכול.</p>
+
+<h2>רכישה</h2>
+<p><bdi>Fixi</bdi> נמכר דרך <bdi>Microsoft Store</bdi>, כולל תקופת הניסיון החינמית.
+ה-<bdi>Store</bdi> מטפל ברכישה ומדווח ל-<bdi>Fixi</bdi> רק אם העותק הזה ברישיון ואם תקופת
+ניסיון עדיין פעילה. אנחנו לא מקבלים פרטי תשלום, ול-<bdi>Fixi</bdi> אין חשבון, אין התחברות
+ואין פרופיל משתמש.</p>
+<p>לקראת סוף תקופת הניסיון, <bdi>Fixi</bdi> מזכיר פעמיים שאפשר לרכוש אותו. אחרי שהיא
+מסתיימת, כשהוא מזהה בלבול שפה שהוא כבר לא רשאי לתקן, הוא אומר זאת, עם קישור
+ל-<bdi>Store</bdi>. פעם אחת, אחרי שהוא עבד היטב בשבילכם, הוא עשוי לשאול אם תרצו לדרג אותו;
+הדירוג עצמו נעשה בחלון של ה-<bdi>Store</bdi>.</p>
+
+<h2>ילדים</h2>
+<p><bdi>Fixi</bdi> הוא כלי הקלדה ללא תכונות חברתיות, ללא תוכן וללא איסוף נתונים. הוא מתאים לכל
+הגילים.</p>
+
+<h2>שינויים במדיניות</h2>
+<p>אם המדיניות הזאת תשתנה, הגרסה המעודכנת תפורסם כאן והתאריך בראש העמוד יתעדכן. כל שינוי
+שישפיע על מה ש-<bdi>Fixi</bdi> רואה או שומר יפורסם גם באפליקציה עצמה.</p>
+
+<h2>יצירת קשר</h2>
+<p>שאלות על המדיניות אפשר לשלוח לכתובת התמיכה שמופיעה בדף של <bdi>Fixi</bdi>
+ב-<bdi>Microsoft Store</bdi>.</p>
+
+</article>
+
+</main>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var button = document.getElementById("lang-toggle");
+    var titles = { en: "Fixi — Privacy Policy", he: "Fixi — מדיניות פרטיות" };
+
+    function apply(lang) {
+      root.setAttribute("data-lang", lang);
+      root.lang = lang;
+      root.dir = lang === "he" ? "rtl" : "ltr";
+      document.title = titles[lang];
+
+      // The button names the language it switches TO, written in that language.
+      var other = lang === "he" ? "en" : "he";
+      button.textContent = other === "he" ? "עברית" : "English";
+      button.lang = other;
+      button.setAttribute("aria-label", other === "he" ? "עברית" : "Switch to English");
+    }
+
+    apply(root.getAttribute("data-lang") === "he" ? "he" : "en");
+
+    button.addEventListener("click", function () {
+      var next = root.getAttribute("data-lang") === "he" ? "en" : "he";
+      apply(next);
+      try { localStorage.setItem("fixi-lang", next); } catch (e) {}
+      window.scrollTo(0, 0);
+    });
+  })();
+</script>
+</body>
+</html>
