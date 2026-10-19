@@ -401,19 +401,23 @@ mouse click and correction. Nothing is written to disk, and Fixi contains no net
     });
   })();
 
-  // ---- the demo: the exact sentence from the Store certification notes ----
-  // Typed on the English layout, these keys spell "now I want to check" in Hebrew - and Fixi
-  // rewrites all four words once the second one confirms the mix-up.
+  // ---- the demo: what Fixi really does, at real speed ----
+  // Two everyday Israeli chat lines, typed on the English keyboard by mistake. As in the app,
+  // Fixi corrects at the SECOND word (LexiconTests.Website_demo_sentences_are_fixed_at_the_
+  // second_word checks that), switches the keyboard to Hebrew, and the rest of the sentence
+  // simply comes out in Hebrew. The gibberish is what those keys really produce.
   (function () {
-    var typedText = "gfahu tbh rumv kcsue ";
-    var fixedText = "עכשיו אני רוצה לבדוק ";
+    var sentences = [
+      { typed: "nv xdrbu ", fixed: "מה סגרנו ", rest: "בסוף? אתם באים?" },
+      { typed: "ang, nv ", fixed: "שמעת מה ", rest: "קרה לאסף?" }
+    ];
     var toast = {
-      he: ["Fixi תיקן בלבול שפה", "4 מילים תוקנו ושפת המקלדת הוחלפה"],
-      en: ["Fixi fixed a language mix-up", "4 words were corrected and the keyboard language was switched"]
+      he: ["Fixi תיקן בלבול שפה", "2 מילים תוקנו ושפת המקלדת הוחלפה. לביטול: Ctrl פעמיים"],
+      en: ["Fixi fixed a language mix-up", "2 words were corrected and the keyboard language was switched. To undo: tap Ctrl twice"]
     };
     var captions = {
-      he: "מה שהוקלד באנגלית בטעות, ומה ש-Fixi השאיר על המסך.",
-      en: "What was typed on the English keyboard by mistake, and what Fixi left on screen."
+      he: "מקלידים בעברית, המקלדת באנגלית - ו-Fixi מתקן כבר במילה השנייה.",
+      en: "Typing Hebrew with the keyboard in English - Fixi fixes it by the second word."
     };
 
     var template = document.getElementById("demo-template");
@@ -432,7 +436,8 @@ mouse click and correction. Nothing is written to disk, and Fixi contains no net
       demos.push(fig);
     });
 
-    function set(state, text) {
+    // state: "" (empty), "wrong" (gibberish, English keyboard) or "fixed" (Hebrew keyboard)
+    function set(state, text, showToast) {
       demos.forEach(function (fig) {
         var t = fig.querySelector(".typed");
         t.textContent = text;
@@ -440,34 +445,46 @@ mouse click and correction. Nothing is written to disk, and Fixi contains no net
         // The whole box changes direction, as a real text box does, so the caret follows.
         fig.querySelector(".window").dir = state === "fixed" ? "rtl" : "ltr";
         fig.querySelector(".layout").textContent = state === "fixed" ? "HEB" : "ENG";
-        fig.querySelector(".toast").classList.toggle("show", state === "fixed");
+        fig.querySelector(".toast").classList.toggle("show", !!showToast);
       });
     }
 
     // Without motion: show the outcome, which is the point anyway.
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      set("fixed", fixedText);
+      set("fixed", sentences[0].fixed + sentences[0].rest, true);
       return;
     }
 
-    function run() {
+    var pace = function () { return 110 + Math.random() * 90; };
+
+    function play(n) {
+      var s = sentences[n % sentences.length];
       var i = 0;
-      set("", "");
-      (function step() {
-        if (i <= typedText.length) {
-          set(i > 6 ? "wrong" : "", typedText.slice(0, i));
+      set("", "", false);
+
+      (function typeGibberish() {
+        if (i <= s.typed.length) {
+          set(i > 0 ? "wrong" : "", s.typed.slice(0, i), false);
           i++;
-          setTimeout(step, 110 + Math.random() * 90);
-        } else {
-          setTimeout(function () {
-            set("fixed", fixedText);
-            setTimeout(run, 4500);
-          }, 450);
+          return setTimeout(typeGibberish, pace());
         }
+        // The second word is complete: Fixi rewrites both and switches the keyboard.
+        setTimeout(function () {
+          var j = 0;
+          set("fixed", s.fixed, true);
+          (function typeHebrew() {
+            if (j <= s.rest.length) {
+              set("fixed", s.fixed + s.rest.slice(0, j), true);
+              j++;
+              return setTimeout(typeHebrew, pace());
+            }
+            setTimeout(function () { play(n + 1); }, 3200);
+          })();
+        }, 350);
       })();
     }
 
-    setTimeout(run, 600);
+    setTimeout(function () { play(0); }, 600);
   })();
 </script>
 </body>
